@@ -142,11 +142,12 @@ body {
     color: var(--text-light);
 }
 
-.hero-hindi {
+.hero-main {
+    font-family: var(--font-display);
     font-size: 7rem;
-    font-weight: 700;
+    font-weight: 400;
     margin-bottom: 1rem;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
 }
 
 .scroll-text {
@@ -156,11 +157,12 @@ body {
     color: rgba(255, 255, 255, 0.7);
 }
 
-.hero-english {
+.hero-tagline {
     font-family: var(--font-display);
-    font-size: 5rem;
+    font-size: 3rem;
     font-weight: 400;
     letter-spacing: 3px;
+    opacity: 0.8;
 }
 
 /* ==========================================
@@ -177,11 +179,13 @@ body {
     margin: 0 auto;
 }
 
-.hindi-heading {
+.section-heading {
+    font-family: var(--font-display);
     font-size: 3rem;
     color: var(--text-dark);
     margin-bottom: 1rem;
-    font-weight: 700;
+    font-weight: 400;
+    letter-spacing: 2px;
 }
 
 .intro-text {
@@ -333,7 +337,7 @@ body {
     color: var(--text-light);
 }
 
-.drinks-text .hindi-heading {
+.drinks-text .section-heading {
     color: var(--text-light);
     margin-bottom: 1.5rem;
 }
@@ -359,7 +363,7 @@ body {
     text-align: center;
 }
 
-.hindi-heading.large {
+.section-heading.large {
     font-size: 4rem;
     margin-bottom: 3rem;
 }
@@ -404,7 +408,7 @@ body {
     color: var(--text-light);
 }
 
-.about-text .hindi-heading {
+.about-text .section-heading {
     color: var(--text-light);
     margin-bottom: 1.5rem;
 }
@@ -440,7 +444,7 @@ body {
     margin: 0 auto;
 }
 
-.contact-info .hindi-heading {
+.contact-info .section-heading {
     margin-bottom: 3rem;
     text-align: center;
 }
@@ -564,15 +568,15 @@ body {
         display: none;
     }
 
-    .hero-hindi {
+    .hero-main {
         font-size: 4rem;
     }
 
-    .hero-english {
-        font-size: 3rem;
+    .hero-tagline {
+        font-size: 2rem;
     }
 
-    .hindi-heading {
+    .section-heading {
         font-size: 2rem;
     }
 
@@ -604,19 +608,19 @@ body {
         padding: 0 1.5rem;
     }
 
-    .hero-hindi {
+    .hero-main {
         font-size: 2.5rem;
     }
 
-    .hero-english {
-        font-size: 2rem;
+    .hero-tagline {
+        font-size: 1.5rem;
     }
 
-    .hindi-heading {
+    .section-heading {
         font-size: 1.8rem;
     }
 
-    .hindi-heading.large {
+    .section-heading.large {
         font-size: 2.5rem;
     }
 
