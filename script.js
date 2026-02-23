@@ -16,6 +16,37 @@ document.querySelectorAll('.food__marquee').forEach(m => {
     m.style.setProperty('--dur', speed + 's');
 });
 
+// ---------- Location popup (Choose Your Location) ----------
+const locationPopup = document.getElementById('locationPopup');
+const locationOverlay = document.getElementById('locationOverlay');
+const locationClose = document.getElementById('locationClose');
+const navBookBtn = document.getElementById('navBookBtn');
+const heroBookBtn = document.getElementById('heroBookBtn');
+
+function openLocationPopup() {
+    locationPopup.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeLocationPopup() {
+    locationPopup.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+if (navBookBtn) navBookBtn.addEventListener('click', openLocationPopup);
+if (heroBookBtn) heroBookBtn.addEventListener('click', openLocationPopup);
+if (locationOverlay) locationOverlay.addEventListener('click', closeLocationPopup);
+if (locationClose) locationClose.addEventListener('click', closeLocationPopup);
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && locationPopup.classList.contains('active')) {
+        closeLocationPopup();
+    }
+});
+
+document.querySelectorAll('.location-popup__link').forEach(link => {
+    link.addEventListener('click', () => closeLocationPopup());
+});
+
 // ---------- News scroll navigation ----------
 const newsList = document.getElementById('newsList');
 const newsUp = document.getElementById('newsUp');
@@ -69,7 +100,6 @@ document.querySelectorAll(
     io.observe(el);
 });
 
-// Inject visible state
 const style = document.createElement('style');
 style.textContent = '.visible{opacity:1!important;transform:translateY(0)!important}';
 document.head.appendChild(style);

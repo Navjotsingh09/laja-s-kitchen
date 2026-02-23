@@ -25,12 +25,24 @@
                 <li><a href="#about">ABOUT</a></li>
                 <li><a href="#careers">CAREERS</a></li>
             </ul>
-            <a href="#footer" class="nav__cta">BOOK A TABLE</a>
+            <button class="nav__cta" id="navBookBtn">BOOK A TABLE</button>
             <button class="nav__burger" id="burger" aria-label="Menu">
                 <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
+
+    <!-- ============ LOCATION POPUP ============ -->
+    <div class="location-popup" id="locationPopup">
+        <div class="location-popup__overlay" id="locationOverlay"></div>
+        <div class="location-popup__box">
+            <p class="location-popup__title">CHOOSE YOUR LOCATION</p>
+            <div class="location-popup__options">
+                <a href="#footer" class="location-popup__link">LAJA KITCHEN</a>
+            </div>
+            <button class="location-popup__close" id="locationClose">&times;</button>
+        </div>
+    </div>
 
     <!-- ============ HERO ============ -->
     <section class="hero">
@@ -47,8 +59,9 @@
         </div>
         <div class="hero__bottom-right">
             <span>Laja Kitchen</span>
+            <svg class="hero__bottom-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
         </div>
-        <a href="#footer" class="hero__book-btn">BOOK A TABLE</a>
+        <button class="hero__book-btn" id="heroBookBtn">BOOK A TABLE <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></button>
     </section>
 
     <!-- ============ INTRO ============ -->
@@ -277,7 +290,8 @@
     <!-- ============ SHOP ============ -->
     <section class="shop" id="shop">
         <div class="shop__inner">
-            <div class="shop__carousel">
+            <div class="shop__left">
+                <p class="tag">King of the Kitchen</p>
                 <div class="shop__list" id="shopList">
                     <a href="#" class="shop__item">
                         <span class="shop__item-name">CHETTINAD MADRAS RECIPE KIT</span>
@@ -296,10 +310,9 @@
                         <span class="shop__item-price">£4.50</span>
                     </a>
                 </div>
-                <button class="shop__nav" id="shopNext" aria-label="Next product">next &rarr;</button>
+                <button class="shop__next" id="shopNext" aria-label="Next product">next</button>
             </div>
-            <div class="shop__text">
-                <p class="tag">King of the Kitchen</p>
+            <div class="shop__right">
                 <h2 class="heading">Kitchen<br>at Home</h2>
                 <p class="desc">Add the taste of Delhi to your kitchen with our authentic Indian restaurant quality home recipe kits. Choose from Butter Masala, Chettinad Madras and Onion Bhaji.<br><br>And better yet — we deliver nationwide!</p>
                 <a href="#" class="cta-link">VIEW SHOP</a>
@@ -328,6 +341,7 @@
         <div class="news__inner">
             <p class="tag tag--light">Latest News</p>
             <h2 class="heading heading--light">In the Press</h2>
+            <div class="news__body">
             <div class="news__scroll" id="newsList">
                 <a href="#" class="news__item">Best Street Food Award 2025 — Another Win!</a>
                 <a href="#" class="news__item">Laja Kitchen Featured in Top 10 Indian Restaurants</a>
@@ -343,8 +357,9 @@
                 <a href="#" class="news__item">Bottomless Curry Club Expands Nationwide</a>
             </div>
             <div class="news__nav">
-                <button class="news__btn" id="newsUp" aria-label="Previous">&uarr;</button>
-                <button class="news__btn" id="newsDown" aria-label="Next">&darr;</button>
+                <button class="news__btn" id="newsUp" aria-label="Previous"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg></button>
+                <button class="news__btn" id="newsDown" aria-label="Next"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+            </div>
             </div>
         </div>
     </section>
@@ -439,6 +454,7 @@
                     <a href="#">DELIVERY</a>
                     <a href="#careers">CAREERS</a>
                     <a href="#about">ABOUT</a>
+                    <a href="#footer">LOCATIONS</a>
                 </nav>
             </div>
         </div>
