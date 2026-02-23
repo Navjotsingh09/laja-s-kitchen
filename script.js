@@ -1,177 +1,69 @@
-// ==========================================
-// Mobile Navigation
-// ==========================================
-const hamburger = document.getElementById('hamburger');
-const navMenu = document.getElementById('navMenu');
-const navbar = document.getElementById('navbar');
+/* ================================================
+   Laja Kitchen — script.js
+   ================================================ */
 
-if (hamburger && navMenu) {
-    hamburger.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        hamburger.classList.toggle('active');
-    });
+// ---------- Mobile nav ----------
+const burger = document.getElementById('burger');
+const navLinks = document.getElementById('navLinks');
 
-    // Close menu when clicking nav links
-    const navLinks = document.querySelectorAll('.nav-menu a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            hamburger.classList.remove('active');
-        });
-    });
-}
-
-// ==========================================
-// Smooth Scroll
-// ==========================================
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    });
+burger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
 });
 
-// ==========================================
-// Horizontal Carousel Scroll
-// ==========================================
-const carouselContainers = document.querySelectorAll('.carousel-container');
+// Close nav on link click
+navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+});
 
-carouselContainers.forEach(container => {
-    let isDown = false;
-    let startX;
-    let scrollLeft;
+// ---------- Drag-to-scroll on food rows ----------
+document.querySelectorAll('.food__track').forEach(track => {
+    let isDown = false, startX, scrollL;
 
-    container.addEventListener('mousedown', (e) => {
+    track.addEventListener('mousedown', e => {
         isDown = true;
-        container.style.cursor = 'grabbing';
-        startX = e.pageX - container.offsetLeft;
-        scrollLeft = container.scrollLeft;
+        track.style.cursor = 'grabbing';
+        startX = e.pageX - track.offsetLeft;
+        scrollL = track.scrollLeft;
     });
-
-    container.addEventListener('mouseleave', () => {
-        isDown = false;
-        container.style.cursor = 'grab';
-    });
-
-    container.addEventListener('mouseup', () => {
-        isDown = false;
-        container.style.cursor = 'grab';
-    });
-
-    container.addEventListener('mousemove', (e) => {
+    track.addEventListener('mouseleave', () => { isDown = false; track.style.cursor = 'grab'; });
+    track.addEventListener('mouseup',    () => { isDown = false; track.style.cursor = 'grab'; });
+    track.addEventListener('mousemove', e => {
         if (!isDown) return;
         e.preventDefault();
-        const x = e.pageX - container.offsetLeft;
-        const walk = (x - startX) * 2;
-        container.scrollLeft = scrollLeft - walk;
+        track.scrollLeft = scrollL - ((e.pageX - track.offsetLeft) - startX) * 1.5;
     });
 
-    // Set cursor style
-    container.style.cursor = 'grab';
+    track.style.cursor = 'grab';
 });
 
-// ==========================================
-// Scroll Animations
-// ==========================================
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
+// ---------- Scroll-triggered fade-in ----------
+const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
         }
     });
-}, observerOptions);
+}, { threshold: 0.15 });
 
-// Observe sections
-document.querySelectorAll('section').forEach(section => {
-    section.style.opacity = '0';
-    section.style.transform = 'translateY(30px)';
-    section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-    observer.observe(section);
+document.querySelectorAll(
+    '.intro, .drinks__inner, .about__inner, .careers__inner, .contact__inner'
+).forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(40px)';
+    el.style.transition = 'opacity .8s ease, transform .8s ease';
+    io.observe(el);
 });
 
-// ==========================================
-// Book a Table Button
-// ==========================================
-const bookBtn = document.querySelector('.book-btn');
-if (bookBtn) {
-    bookBtn.addEventListener('click', () => {
-        alert('Booking feature coming soon! Please call us to reserve a table at +44 123 456 7890');
-    });
-}
+// Add the "visible" class style
+const style = document.createElement('style');
+style.textContent = `.visible{opacity:1!important;transform:translateY(0)!important}`;
+document.head.appendChild(style);
 
-// ==========================================
-// Navbar Scroll Effect
-// ==========================================
-let lastScroll = 0;
+// ---------- Navbar shadow on scroll ----------
+const nav = document.querySelector('.nav');
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > 100) {
-        navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.3)';
-    } else {
-        navbar.style.boxShadow = 'none';
-    }
-
-    lastScroll = currentScroll;
+    nav.style.boxShadow = window.scrollY > 50
+        ? '0 2px 20px rgba(0,0,0,.4)'
+        : 'none';
 });
-
-// ==========================================
-// Menu Link Click Handlers
-// ==========================================
-const menuLinks = document.querySelectorAll('.menu-link');
-menuLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        if (link.getAttribute('href') === '#') {
-            e.preventDefault();
-            alert('Menu coming soon!');
-        }
-    });
-});
-
-// ==========================================
-// Loading Animation
-// ==========================================
-window.addEventListener('load', () => {
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        document.body.style.transition = 'opacity 0.5s ease';
-        document.body.style.opacity = '1';
-    }, 100);
-});
-
-// ==========================================
-// Auto-scroll Carousel on Load (Desktop)
-// ==========================================
-if (window.innerWidth > 768) {
-    carouselContainers.forEach((container, index) => {
-        setTimeout(() => {
-            const scrollAmount = 100;
-            let currentScroll = 0;
-            const maxScroll = container.scrollWidth - container.clientWidth;
-            
-            const autoScroll = setInterval(() => {
-                if (currentScroll >= maxScroll) {
-                    clearInterval(autoScroll);
-                } else {
-                    container.scrollLeft += 1;
-                    currentScroll = container.scrollLeft;
-                }
-            }, 30);
-
-            // Clear on user interaction
-            container.addEventListener('mousedown', () => clearInterval(autoScroll));
-            container.addEventListener('touchstart', () => clearInterval(autoScroll));
-        }, 1000 + (index * 500));
-    });
-}
-
-console.log('🍛 Laja Kitchen - Website loaded successfully!');
