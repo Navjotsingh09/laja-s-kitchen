@@ -1,33 +1,25 @@
 // ==========================================
-// Navigation & Mobile Menu
+// Mobile Navigation
 // ==========================================
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('navMenu');
 const navbar = document.getElementById('navbar');
-const navLinks = document.querySelectorAll('.nav-menu a');
 
-// Toggle mobile menu
-hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-    hamburger.classList.toggle('active');
-});
-
-// Close mobile menu when clicking on a link
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        hamburger.classList.remove('active');
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        hamburger.classList.toggle('active');
     });
-});
 
-// Navbar scroll effect
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
-});
+    // Close menu when clicking nav links
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+        });
+    });
+}
 
 // ==========================================
 // Smooth Scroll
@@ -37,16 +29,52 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     });
 });
 
 // ==========================================
-// Intersection Observer for Animations
+// Horizontal Carousel Scroll
+// ==========================================
+const carouselContainers = document.querySelectorAll('.carousel-container');
+
+carouselContainers.forEach(container => {
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        container.style.cursor = 'grabbing';
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+    });
+
+    container.addEventListener('mouseleave', () => {
+        isDown = false;
+        container.style.cursor = 'grab';
+    });
+
+    container.addEventListener('mouseup', () => {
+        isDown = false;
+        container.style.cursor = 'grab';
+    });
+
+    container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 2;
+        container.scrollLeft = scrollLeft - walk;
+    });
+
+    // Set cursor style
+    container.style.cursor = 'grab';
+});
+
+// ==========================================
+// Scroll Animations
 // ==========================================
 const observerOptions = {
     threshold: 0.1,
@@ -62,133 +90,50 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe all sections and menu items
-document.querySelectorAll('section, .menu-item, .award-item').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(el);
-});
-
-// ==========================================
-// Contact Form Handling
-// ==========================================
-const contactForm = document.getElementById('contactForm');
-
-contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Get form values
-    const formData = new FormData(contactForm);
-    
-    // Show success message
-    showNotification('Thank you! Your message has been sent successfully.', 'success');
-    
-    // Reset form
-    contactForm.reset();
+// Observe sections
+document.querySelectorAll('section').forEach(section => {
+    section.style.opacity = '0';
+    section.style.transform = 'translateY(30px)';
+    section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    observer.observe(section);
 });
 
 // ==========================================
 // Book a Table Button
 // ==========================================
-const ctaButton = document.querySelector('.cta-button');
-if (ctaButton) {
-    ctaButton.addEventListener('click', () => {
-        showNotification('Booking feature coming soon! Please call us to reserve a table.', 'info');
+const bookBtn = document.querySelector('.book-btn');
+if (bookBtn) {
+    bookBtn.addEventListener('click', () => {
+        alert('Booking feature coming soon! Please call us to reserve a table at +44 123 456 7890');
     });
 }
 
 // ==========================================
-// Notification System
+// Navbar Scroll Effect
 // ==========================================
-function showNotification(message, type = 'success') {
-    // Remove existing notifications
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
-    
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    
-    // Add styles
-    Object.assign(notification.style, {
-        position: 'fixed',
-        top: '100px',
-        right: '20px',
-        padding: '1rem 1.5rem',
-        background: type === 'success' ? '#2A9D8F' : '#F7931E',
-        color: 'white',
-        borderRadius: '10px',
-        boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)',
-        zIndex: '10000',
-        animation: 'slideInRight 0.3s ease',
-        fontWeight: '500'
-    });
-    
-    // Add to DOM
-    document.body.appendChild(notification);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, 3000);
-}
-
-// Add notification animations to document
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// ==========================================
-// Parallax Effect for Hero Section
-// ==========================================
+let lastScroll = 0;
 window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    if (hero && scrolled < window.innerHeight) {
-        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+    const currentScroll = window.pageYOffset;
+
+    if (currentScroll > 100) {
+        navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.3)';
+    } else {
+        navbar.style.boxShadow = 'none';
     }
+
+    lastScroll = currentScroll;
 });
 
 // ==========================================
-// Menu Item Hover Effect
+// Menu Link Click Handlers
 // ==========================================
-const menuItems = document.querySelectorAll('.menu-item');
-menuItems.forEach(item => {
-    item.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-10px) scale(1.02)';
-    });
-    
-    item.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
+const menuLinks = document.querySelectorAll('.menu-link');
+menuLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        if (link.getAttribute('href') === '#') {
+            e.preventDefault();
+            alert('Menu coming soon!');
+        }
     });
 });
 
@@ -204,18 +149,29 @@ window.addEventListener('load', () => {
 });
 
 // ==========================================
-// Dynamic Year in Footer
+// Auto-scroll Carousel on Load (Desktop)
 // ==========================================
-const footerYear = document.querySelector('.footer-bottom p');
-if (footerYear) {
-    footerYear.textContent = `© ${new Date().getFullYear()} Laja Kitchen. All rights reserved.`;
+if (window.innerWidth > 768) {
+    carouselContainers.forEach((container, index) => {
+        setTimeout(() => {
+            const scrollAmount = 100;
+            let currentScroll = 0;
+            const maxScroll = container.scrollWidth - container.clientWidth;
+            
+            const autoScroll = setInterval(() => {
+                if (currentScroll >= maxScroll) {
+                    clearInterval(autoScroll);
+                } else {
+                    container.scrollLeft += 1;
+                    currentScroll = container.scrollLeft;
+                }
+            }, 30);
+
+            // Clear on user interaction
+            container.addEventListener('mousedown', () => clearInterval(autoScroll));
+            container.addEventListener('touchstart', () => clearInterval(autoScroll));
+        }, 1000 + (index * 500));
+    });
 }
 
-// ==========================================
-// Scroll to Top on Page Load
-// ==========================================
-window.onbeforeunload = function () {
-    window.scrollTo(0, 0);
-};
-
-console.log('🍛 Laja Kitchen website loaded successfully!');
+console.log('🍛 Laja Kitchen - Website loaded successfully!');
