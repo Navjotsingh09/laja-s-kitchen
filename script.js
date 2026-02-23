@@ -2,7 +2,7 @@
    Laja Kitchen — script.js
    ================================================ */
 
-// ---------- Mobile nav ----------
+// ---------- Mobile nav toggle ----------
 const burger = document.getElementById('burger');
 const navLinks = document.getElementById('navLinks');
 
@@ -10,7 +10,6 @@ burger.addEventListener('click', () => {
     navLinks.classList.toggle('open');
 });
 
-// Close nav on link click
 navLinks.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => navLinks.classList.remove('open'));
 });
@@ -36,6 +35,41 @@ document.querySelectorAll('.food__track').forEach(track => {
     track.style.cursor = 'grab';
 });
 
+// ---------- Auto-scroll food rows (alternating directions) ----------
+document.querySelectorAll('.food__track').forEach(track => {
+    const dir = track.dataset.direction;
+    const speed = 0.4; // px per frame
+
+    // Start rows that scroll right at the end
+    if (dir === 'right') {
+        track.scrollLeft = track.scrollWidth - track.clientWidth;
+    }
+
+    let paused = false;
+    track.addEventListener('mouseenter', () => paused = true);
+    track.addEventListener('mouseleave', () => paused = false);
+    track.addEventListener('touchstart', () => paused = true, { passive: true });
+    track.addEventListener('touchend',   () => paused = false);
+
+    function step() {
+        if (!paused) {
+            if (dir === 'left') {
+                track.scrollLeft += speed;
+                if (track.scrollLeft >= track.scrollWidth - track.clientWidth) {
+                    track.scrollLeft = 0;
+                }
+            } else {
+                track.scrollLeft -= speed;
+                if (track.scrollLeft <= 0) {
+                    track.scrollLeft = track.scrollWidth - track.clientWidth;
+                }
+            }
+        }
+        requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+});
+
 // ---------- Scroll-triggered fade-in ----------
 const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -44,26 +78,26 @@ const io = new IntersectionObserver((entries) => {
             io.unobserve(entry.target);
         }
     });
-}, { threshold: 0.15 });
+}, { threshold: 0.12 });
 
 document.querySelectorAll(
-    '.intro, .drinks__inner, .about__inner, .careers__inner, .contact__inner'
+    '.intro__inner, .drinks__inner, .shop__inner, .events__inner, .news__inner, .about__inner, .careers__inner'
 ).forEach(el => {
     el.style.opacity = '0';
-    el.style.transform = 'translateY(40px)';
-    el.style.transition = 'opacity .8s ease, transform .8s ease';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity .7s ease, transform .7s ease';
     io.observe(el);
 });
 
-// Add the "visible" class style
+// Inject visible class
 const style = document.createElement('style');
 style.textContent = `.visible{opacity:1!important;transform:translateY(0)!important}`;
 document.head.appendChild(style);
 
-// ---------- Navbar shadow on scroll ----------
+// ---------- Nav shadow on scroll ----------
 const nav = document.querySelector('.nav');
 window.addEventListener('scroll', () => {
-    nav.style.boxShadow = window.scrollY > 50
-        ? '0 2px 20px rgba(0,0,0,.4)'
+    nav.style.boxShadow = window.scrollY > 60
+        ? '0 2px 24px rgba(0,0,0,.5)'
         : 'none';
-});
+}, { passive: true });
